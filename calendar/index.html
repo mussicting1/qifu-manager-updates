@@ -3,27 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#5b5bd6">
+<meta name="theme-color" content="#2563eb">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="黄历日历">
 <meta name="format-detection" content="telephone=no">
 <title>黄历日历 · 日程天气</title>
-<script>window.__APP_VERSION__='1.9';window.__APP_VERSION_CODE__=19;</script>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235b5bd6'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif'%3E%E5%8E%86%3C/text%3E%3C/svg%3E">
+<script>window.__APP_VERSION__='2.0';window.__APP_VERSION_CODE__=20;</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563eb'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif'%3E%E5%8E%86%3C/text%3E%3C/svg%3E">
 <style>/* ===== 手机日历 · 黄历 App 样式 ===== */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
   --bg:#f2f3f8; --card:#ffffff; --card2:#f8f9fc; --ink:#16181d; --sub:#6b7280; --line:#e8eaf1;
-  --brand:#5b5bd6; --brand2:#7c6cf0; --brand-soft:#eeeefe; --gold:#b8860b; --gold-soft:#fdf6e3;
+  --brand:#2563eb; --brand2:#3b82f6; --brand-soft:#eaf1fd; --gold:#b8860b; --gold-soft:#fdf6e3;
   --good:#0f7b52; --good-soft:#e8f6ef; --bad:#c0392b; --bad-soft:#fdeeec;
   --red:#d64545; --green:#12805c; --shadow:0 8px 28px rgba(30,35,60,.08);
   --radius:20px;
 }
 html[data-theme="dark"]{
   --bg:#0e1014; --card:#191c22; --card2:#20242c; --ink:#e9ecf3; --sub:#9aa3b2; --line:#2a2f39;
-  --brand:#8b8bf5; --brand2:#a394fa; --brand-soft:#262a44; --gold:#d8b25a; --gold-soft:#2a2418;
+  --brand:#60a5fa; --brand2:#93c5fd; --brand-soft:#1b2a44; --gold:#d8b25a; --gold-soft:#2a2418;
   --good:#4cc38a; --good-soft:#16291f; --bad:#f08074; --bad-soft:#2c1a18;
   --red:#f08074; --green:#4cc38a; --shadow:0 10px 30px rgba(0,0,0,.4);
 }
@@ -38,9 +38,9 @@ input:focus,textarea:focus,select:focus{border-color:var(--brand)}
 .app{max-width:520px;margin:0 auto;min-height:100dvh;padding-bottom:84px;position:relative}
 
 /* ---------- 头部 ---------- */
-.hdr{background:linear-gradient(160deg,var(--brand) 0%,#6f5fe0 45%,#8e7bf0 100%);
+.hdr{background:linear-gradient(160deg,var(--brand) 0%,#1d4ed8 45%,#3b82f6 100%);
   color:#fff;padding:calc(12px + env(safe-area-inset-top)) 18px 16px;border-radius:0 0 26px 26px;
-  box-shadow:0 10px 26px rgba(91,91,214,.28);position:relative;overflow:hidden}
+  box-shadow:0 10px 26px rgba(37,99,235,.28);position:relative;overflow:hidden}
 .hdr:after{content:"";position:absolute;right:-40px;top:-60px;width:180px;height:180px;border-radius:50%;
   background:rgba(255,255,255,.09)}
 .hdr-top{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;position:relative;z-index:1}
@@ -83,7 +83,7 @@ main{padding:14px 14px 0}
 .day.other{opacity:.32}
 .day.today .n{color:var(--brand);font-weight:900}
 .day.today:before{content:"";position:absolute;inset:2px;border:1.5px solid var(--brand);border-radius:12px;opacity:.55}
-.day.sel{background:linear-gradient(160deg,var(--brand),var(--brand2));box-shadow:0 6px 16px rgba(91,91,214,.3)}
+.day.sel{background:linear-gradient(160deg,var(--brand),var(--brand2));box-shadow:0 6px 16px rgba(37,99,235,.3)}
 .day.sel .n,.day.sel .l,.day.sel .l.fest,.day.sel .l.gold{color:#fff!important}
 .day.sel:before{border:0}
 .day .dots{display:flex;gap:2px;margin-top:1px;height:4px;align-items:center}
@@ -160,7 +160,7 @@ main{padding:14px 14px 0}
 .pri{width:4px;height:18px;border-radius:2px;flex:none}
 .fab{position:fixed;right:calc(50% - 260px + 18px);bottom:96px;width:54px;height:54px;border-radius:50%;
   background:linear-gradient(150deg,var(--brand),var(--brand2));color:#fff;font-size:26px;display:grid;place-items:center;
-  box-shadow:0 10px 24px rgba(91,91,214,.42);z-index:40}
+  box-shadow:0 10px 24px rgba(37,99,235,.42);z-index:40}
 @media(max-width:540px){.fab{right:18px}}
 .fab:active{transform:scale(.94)}
 
@@ -196,7 +196,7 @@ main{padding:14px 14px 0}
 .cals i{width:9px;height:9px;border-radius:3px;display:block}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 16px;border-radius:13px;
   background:var(--card2);font-size:14px;font-weight:700;color:var(--ink);border:1px solid var(--line)}
-.btn.primary{background:linear-gradient(150deg,var(--brand),var(--brand2));color:#fff;border:0;box-shadow:0 6px 16px rgba(91,91,214,.28)}
+.btn.primary{background:linear-gradient(150deg,var(--brand),var(--brand2));color:#fff;border:0;box-shadow:0 6px 16px rgba(37,99,235,.28)}
 .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--sub)}
 .btn.danger{color:var(--bad);border-color:var(--bad-soft);background:var(--bad-soft)}
 .btn.block{width:100%}
@@ -256,8 +256,8 @@ main{padding:14px 14px 0}
 .tab.on .ti svg{stroke:var(--brand)}
 
 /* ---------- v1.5 设计优化 ---------- */
-.today-card{background:linear-gradient(135deg,var(--brand),#7c7ce0);border-radius:18px;padding:13px 16px;margin:0 2px 12px;color:#fff;
-  cursor:pointer;display:flex;align-items:center;gap:12px;box-shadow:0 6px 18px rgba(91,91,214,.28);position:relative;overflow:hidden}
+.today-card{background:linear-gradient(135deg,var(--brand),#3b82f6);border-radius:18px;padding:13px 16px;margin:0 2px 12px;color:#fff;
+  cursor:pointer;display:flex;align-items:center;gap:12px;box-shadow:0 6px 18px rgba(37,99,235,.28);position:relative;overflow:hidden}
 .today-card:active{transform:scale(.985)}
 .today-card .tc-date{font-size:21px;font-weight:800;letter-spacing:.3px}
 .today-card .tc-date small{font-size:11px;font-weight:600;opacity:.8;margin-left:6px}
@@ -313,11 +313,11 @@ main{padding:14px 14px 0}
 
 /* ===== v1.9 搜索与日期工具 ===== */
 .search-input{width:100%;padding:10px 12px;border:1px solid var(--line,#e2e8f0);border-radius:11px;font-size:14px;background:var(--card,#fff);color:var(--ink,#273246);outline:none}
-.search-input:focus{border-color:var(--pri,#5b5bd6)}
+.search-input:focus{border-color:var(--pri,#2563eb)}
 .search-results{margin-top:10px;max-height:48vh;overflow:auto;padding-bottom:6px}
 .search-hint{color:var(--sub,#8a95a5);font-size:12px;line-height:2;padding:6px 2px}
 .sr-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:11px;cursor:pointer}
-.sr-item:active,.sr-item:hover{background:var(--hover,rgba(91,91,214,.08))}
+.sr-item:active,.sr-item:hover{background:var(--hover,rgba(37,99,235,.08))}
 .sr-date{min-width:58px;text-align:center;background:var(--card2,#f4f6fa);border-radius:9px;padding:5px 6px;font-size:10px;color:var(--sub,#8a95a5);line-height:1.4;flex-shrink:0}
 .sr-date b{display:block;font-size:16px;color:var(--ink,#273246)}
 .sr-body{flex:1;min-width:0}
@@ -491,7 +491,7 @@ html.m-js .sheet.on{transform:none}
 }
 .ym-m.on{
   background:linear-gradient(160deg,var(--brand),var(--brand2));color:#fff;
-  box-shadow:0 6px 14px rgba(91,91,214,.3);
+  box-shadow:0 6px 14px rgba(37,99,235,.3);
 }
 .ym-m.has-ev i{
   position:absolute;bottom:7px;left:50%;width:4px;height:4px;margin-left:-2px;
@@ -514,7 +514,7 @@ html.m-js .sheet.on{transform:none}
 /* ---------- 15. 启动骨架屏（原生闪屏 → 骨架微光 → 内容） ---------- */
 #mBoot{
   position:fixed;inset:0;z-index:300;display:grid;place-items:center;
-  background:linear-gradient(165deg,#6e5be8 0%,#5b5bd6 52%,#4f4bc8 100%);
+  background:linear-gradient(165deg,#1d4ed8 0%,#2563eb 52%,#1e40af 100%);
 }
 .m-boot-w{width:min(70vw,290px);text-align:center;margin-top:-6vh}
 .m-boot-logo{
@@ -605,7 +605,7 @@ html.m-js .sheet.on{transform:none}
           <span><i style="background:#d64545"></i>休</span>
           <span><i style="background:#c9cedd"></i>班</span>
           <span><i style="background:#b8860b"></i>节气</span>
-          <span><i style="background:#5b5bd6"></i>有日程</span>
+          <span><i style="background:#2563eb"></i>有日程</span>
         </div>
       </div>
       <div class="card lp-card" id="lunarPeek" onclick="App.openDayDrawer()"></div>
@@ -631,19 +631,11 @@ html.m-js .sheet.on{transform:none}
       <div class="card" id="todoList"></div>
     </section>
 
-    <!-- 设置（原「我的」，由右上角 ⚙ 打开） -->
-    <section class="view" data-view="me">
-      <div class="pagehead" style="display:flex;align-items:flex-start;justify-content:space-between">
-        <div><div class="ph-title">设置</div><div class="ph-sub">天气 / 纪念日 / 备份 · 数据只保存在本机</div></div>
-        <button class="iconbtn" onclick="App.closeSettings()" aria-label="返回">✕</button>
-      </div>
-
-      <div class="card">
-        <div class="card-head">
-          <div><b>🌤 天气</b><div class="hint" style="margin-top:2px">城市：<span id="cityName">北京</span></div></div>
-          <button class="btn sm" onclick="App.openCity()">切换城市</button>
-        </div>
-        <div id="wxPanel"></div>
+    <!-- 工具（纪念日倒计时 + 实用工具） -->
+    <section class="view" data-view="tools">
+      <div class="pagehead">
+        <div class="ph-title">工具箱</div>
+        <div class="ph-sub">纪念日 / 日期计算 / 全局搜索</div>
       </div>
 
       <div class="sec-title">纪念日倒计时 <button class="lnk" onclick="App.openAnniv()">＋ 添加</button></div>
@@ -653,6 +645,23 @@ html.m-js .sheet.on{transform:none}
       <div class="card" style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn sm" onclick="App.openSearch()">🔍 全局搜索</button>
         <button class="btn sm" onclick="App.openDateTools()">🧮 日期计算器</button>
+      </div>
+      <div style="height:12px"></div>
+    </section>
+
+    <!-- 设置（原「我的」，由右上角 ⚙ 打开） -->
+    <section class="view" data-view="me">
+      <div class="pagehead" style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div><div class="ph-title">设置</div><div class="ph-sub">天气 / 备份 / 偏好 · 数据只保存在本机</div></div>
+        <button class="iconbtn" onclick="App.closeSettings()" aria-label="返回">✕</button>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div><b>🌤 天气</b><div class="hint" style="margin-top:2px">城市：<span id="cityName">北京</span></div></div>
+          <button class="btn sm" onclick="App.openCity()">切换城市</button>
+        </div>
+        <div id="wxPanel"></div>
       </div>
 
       <div class="sec-title">设置</div>
@@ -709,7 +718,7 @@ html.m-js .sheet.on{transform:none}
       <div class="sec-title">关于</div>
       <div class="card" style="padding:14px">
         <div class="hint" style="margin:0">
-          <b style="color:var(--ink);font-size:13px">黄历日历 <span id="aboutVer">v1.9</span></b><br>
+          <b style="color:var(--ink);font-size:13px">黄历日历 <span id="aboutVer">v2.0</span></b><br>
           黄历（宜忌 / 冲煞 / 值神 / 建除 / 星宿 / 彭祖百忌 / 吉神方位）由 lunar-javascript 本地计算，离线可用；<br>
           节假日与调休依据国务院办公厅 2026 / 2027 年放假安排；<br>
           天气由 Open-Meteo 提供（免费公开数据）；<br>
@@ -727,6 +736,7 @@ html.m-js .sheet.on{transform:none}
     <button class="tab on" data-tab="calendar"><span class="ti"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4.5" width="18" height="16" rx="3"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/><rect x="7" y="12.5" width="4" height="4" rx="1" fill="currentColor" stroke="none"/></svg></span>日历</button>
     <button class="tab" data-tab="agenda"><span class="ti"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="3.5" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="18" r="1.3" fill="currentColor" stroke="none"/></svg></span>日程</button>
     <button class="tab" data-tab="todo"><span class="ti"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.6 2.6L16.5 9"/></svg></span>待办</button>
+    <button class="tab" data-tab="tools"><span class="ti"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12.5h18M12 12.5v2.5"/></svg></span>工具</button>
   </div></nav>
 </div>
 
@@ -974,7 +984,7 @@ function renderCalendar(){
   renderDayDetail();
 }
 const CAL={
-  work:{name:'工作',color:'#5b5bd6'},
+  work:{name:'工作',color:'#2563eb'},
   life:{name:'生活',color:'#0f9d8f'},
   social:{name:'聚会',color:'#e8863a'},
   money:{name:'财务',color:'#d64545'},
@@ -1176,6 +1186,7 @@ function switchTab(t){
   if(t==='calendar'){ C.renderCalendar(); renderTodayCard(); }
   if(t==='agenda') renderAgenda();
   if(t==='todo') renderTodo();
+  if(t==='tools') renderTools();
   if(t==='me'){ renderMe(); renderStats(); }
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -1386,16 +1397,8 @@ function renderMe(){
   $('#wxPanel').innerHTML=wxHtml;
   $('#cityName').textContent=city;
 
-  // 纪念日倒计时（按临近排序，天数徽章分级着色）
-  const anns=(db().anniversaries||[]).map(a=>({a,info:annivNext(a)})).sort((p,q)=>(p.info.days||0)-(q.info.days||0));
-  $('#annivList').innerHTML=anns.length?anns.map(o=>{
-    const a=o.a, info=o.info, dn=info.days;
-    const cls=dn===0?'chip-hl':dn<=7?'chip red':dn<=30?'chip gold':'chip';
-    return '<div class="row-item"><div class="ci">'+(a.lunar?'🌙':'🎂')+'</div>'
-      +'<div class="cb"><div class="ct">'+esc(a.title)+'</div><div class="cs">'+(a.lunar?'农历 ':'')+esc(a.date||'')+(info.date?(' · 下次 '+(info.date.getMonth()+1)+'月'+info.date.getDate()+'日'):'')+'</div></div>'
-      +'<div class="cr"><span class="'+cls+' cr-chip"><b>'+(dn===0?'今天':dn+' 天')+'</b></span></div>'
-      +'<button class="btn sm ghost" onclick="event.stopPropagation();App.delAnniv(\''+a.id+'\')">删</button></div>';
-  }).join(''):'<div class="empty">添加生日 / 纪念日 / 还款日，自动倒计时</div>';
+  // 纪念日倒计时（渲染到工具箱页）
+  renderAnniv();
 
   // 设置开关状态
   const th=db().settings.theme;
@@ -1405,6 +1408,24 @@ function renderMe(){
   $('#notifySwitch').classList.toggle('on',db().settings.notify!==false);
   const st=statSummary();
   $('#statSummary').innerHTML='日程 <b>'+st.events+'</b> 条 · 待办 <b>'+st.todos+'</b> 条 · 纪念日 <b>'+st.anns+'</b> 个';
+}
+/* 工具箱页 */
+function renderTools(){
+  const st=statSummary();
+  renderAnniv();
+}
+/** 纪念日倒计时（按临近排序，天数徽章分级着色） */
+function renderAnniv(){
+  const el=$('#annivList'); if(!el) return;
+  const anns=(db().anniversaries||[]).map(a=>({a,info:annivNext(a)})).sort((p,q)=>(p.info.days||0)-(q.info.days||0));
+  el.innerHTML=anns.length?anns.map(o=>{
+    const a=o.a, info=o.info, dn=info.days;
+    const cls=dn===0?'chip-hl':dn<=7?'chip red':dn<=30?'chip gold':'chip';
+    return '<div class="row-item"><div class="ci">'+(a.lunar?'🌙':'🎂')+'</div>'
+      +'<div class="cb"><div class="ct">'+esc(a.title)+'</div><div class="cs">'+(a.lunar?'农历 ':'')+esc(a.date||'')+(info.date?(' · 下次 '+(info.date.getMonth()+1)+'月'+info.date.getDate()+'日'):'')+'</div></div>'
+      +'<div class="cr"><span class="'+cls+' cr-chip"><b>'+(dn===0?'今天':dn+' 天')+'</b></span></div>'
+      +'<button class="btn sm ghost" onclick="event.stopPropagation();App.delAnniv(\''+a.id+'\')">删</button></div>';
+  }).join(''):'<div class="empty">添加生日 / 纪念日 / 还款日，自动倒计时</div>';
 }
 function statSummary(){
   return {events:db().events.length,todos:db().todos.filter(t=>!t.done).length,anns:db().anniversaries.length};
@@ -1573,11 +1594,11 @@ function saveAnniv(){
       const l=s.getLunar(); rec.lm=l.getMonth(); rec.ld=l.getDay();
     }catch(e){}
   }
-  db().anniversaries.push(rec); save(); closeSheet(); renderMe(); toast('已添加');
+  db().anniversaries.push(rec); save(); closeSheet(); renderAnniv(); if(state.tab==='me') renderMe(); toast('已添加');
 }
 function delAnniv(id){
   if(!confirm('删除这个纪念日？')) return;
-  db().anniversaries=db().anniversaries.filter(a=>a.id!==id); save(); renderMe(); toast('已删除');
+  db().anniversaries=db().anniversaries.filter(a=>a.id!==id); save(); renderAnniv(); if(state.tab==='me') renderMe(); toast('已删除');
 }
 
 /* ---------- 全局搜索 ---------- */
@@ -1734,7 +1755,7 @@ function applyTheme(){
   const btn=$('#btnTheme');
   if(btn) btn.textContent=dark?'☀️':'🌙';
   const meta=$('meta[name=theme-color]');
-  if(meta) meta.setAttribute('content',dark?'#0e1014':'#5b5bd6');
+  if(meta) meta.setAttribute('content',dark?'#0e1014':'#2563eb');
 }
 function cycleTheme(){
   const cur=db().settings.theme||'auto';
@@ -2973,7 +2994,7 @@ else init();
   window.__QIFU_UPDATE_READY__ = true;
 
   var NATIVE = window.QifuNative && typeof window.QifuNative.getUpdateInfo === 'function';
-  var info = { code: 19, version: '1.9', cached: false, url: '' };
+  var info = { code: 20, version: '2.0', cached: false, url: '' };
 
   function $(s) { return document.querySelector(s); }
   function esc(s) {
@@ -2988,7 +3009,7 @@ else init();
   function hideNativeNotice() {
     var s = $('#updStatus');
     if (s && !NATIVE) {
-      s.textContent = '当前为网页/旧版内核，在线更新需使用 v1.8 及以上安装包（当前内置 v1.9）';
+      s.textContent = '当前为网页/旧版内核，在线更新需使用 v1.8 及以上安装包（当前内置 v2.0）';
     }
   }
 
@@ -3000,8 +3021,8 @@ else init();
     var cv = $('#updCurVer');
     var st = $('#updStatus');
     var av = $('#aboutVer');
-    if (cv) cv.textContent = 'v' + (info.version || '1.9');
-    if (av) av.textContent = 'v' + (info.version || '1.9');
+    if (cv) cv.textContent = 'v' + (info.version || '2.0');
+    if (av) av.textContent = 'v' + (info.version || '2.0');
     if (st) {
       st.textContent = info.cached
         ? '已更新到 v' + info.version + '（在线版本）'
@@ -3014,7 +3035,7 @@ else init();
   var MIRROR_URL = 'https://gh-proxy.com/https://raw.githubusercontent.com/mussicting1/qifu-manager-updates/main/calendar/update.json';
 
   function check() {
-    if (!NATIVE) { toast('在线更新需使用 v1.8 及以上安装包（当前内置 v1.9）'); return; }
+    if (!NATIVE) { toast('在线更新需使用 v1.8 及以上安装包（当前内置 v2.0）'); return; }
     var url = (info.url || '').trim();
     if (!url || url === RAW_URL) {
       // 未设置或仍是官方 raw：自动持久化为国内镜像，之后检查更新都走镜像
@@ -3032,7 +3053,7 @@ else init();
   }
 
   function setUrl(first) {
-    if (!NATIVE) { toast('在线更新需使用 v1.8 及以上安装包（当前内置 v1.9）'); return; }
+    if (!NATIVE) { toast('在线更新需使用 v1.8 及以上安装包（当前内置 v2.0）'); return; }
     var body = ''
       + '<div class="hint" style="margin:0 0 10px">填写更新清单地址（update.json 的公开网址）。App 会读取其中的版本号，发现新版本时提示下载。留空则只用内置版本。</div>'
       + '<div class="field"><label>更新地址</label><input id="updUrlIn" type="text" placeholder="https://example.com/update.json" value="' + esc(info.url || '') + '"></div>'
@@ -3090,7 +3111,7 @@ else init();
         + '<div class="hint" style="margin-top:4px">当前 v' + esc(info.version || '') + ' · 版本码 ' + r.remoteCode + '</div></div>'
         + (notes ? '<div style="background:var(--card2,#f4f5fa);border-radius:12px;padding:12px;font-size:12px;color:var(--sub)">' + notes + '</div>' : '')
         + '<div class="hint" style="margin:12px 0 4px;opacity:.7">下载完成后自动安装并重启页面。你的日程、待办数据不会丢失。</div>'
-        + '<div id="updProgress" class="hint" style="margin-top:8px;display:none;color:var(--brand,#5B5BD6)">正在下载并安装…</div>'
+        + '<div id="updProgress" class="hint" style="margin-top:8px;display:none;color:var(--brand,#2563EB)">正在下载并安装…</div>'
         + '<div class="acts" style="margin-top:14px"><button class="btn ghost" onclick="App.closeSheet()">稍后</button>'
         + '<button class="btn" id="updDlBtn" onclick="QifuUpdate.doInstall()">立即更新</button></div>';
       sheet('软件更新', body);
