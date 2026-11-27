@@ -6083,6 +6083,24 @@ body[data-qifu-theme="light"] [role="menu"],
 body[data-qifu-theme="light"] [role="listbox"] { background:#f8f9f8 !important; }
 </style>
 
+
+<style id="qd-client-search-style">
+.qd-client-picker{position:relative}
+.qd-picker-tip{font-weight:400;color:#8a95a5;margin-left:6px;font-size:11px}
+.qd-picker-wrap{position:relative}
+.qd-picker-input{padding-right:42px!important}
+.qd-picker-hidden{display:none!important}
+.qd-picker-toggle{position:absolute;right:5px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#6b7280;font-size:15px;cursor:pointer;padding:5px 8px;line-height:1}
+.qd-picker-toggle:hover{color:var(--blue,#315efb)}
+.qd-picker-list{margin-top:4px;max-height:300px;overflow:auto;background:#fff;border:1px solid var(--line,#e5e9f0);border-radius:10px;box-shadow:0 10px 28px rgba(20,30,60,.14);padding:6px}
+.qd-picker-group{padding:8px 10px 5px;font-size:11px;color:#8a95a5;font-weight:700;letter-spacing:.03em}
+.qd-picker-item{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;border:0;background:transparent;text-align:left;padding:9px 10px;border-radius:7px;cursor:pointer;font:inherit}
+.qd-picker-item:hover,.qd-picker-item.is-selected{background:#eef3ff}
+.qd-picker-name{font-size:13px;color:#273246;font-weight:600}
+.qd-picker-won{font-style:normal;font-size:10px;color:#138054;background:#e8f7ef;border-radius:4px;padding:1px 5px;margin-left:6px}
+.qd-picker-extra{font-size:11px;color:#8a95a5}
+.qd-picker-empty{padding:18px;text-align:center;color:#8a95a5;font-size:12px}
+</style>
 </head>
 <body data-qifu-ui-version="stage60-semantic-money-colors-2026-10-31" data-qifu-stage="85">
 <div class="app">
@@ -11966,9 +11984,15 @@ function renderCustomerActionCenter(){
     var won = clients.filter(function (c) { return c.status === '已成交'; }), rest = clients.filter(function (c) { return c.status !== '已成交'; });
     var clientField = fixedClient
       ? '<input type="hidden" id="qdClient" value="' + E(fixedClient.id) + '"><div class="field full qd-fixed-client"><label>当前客户</label><div class="qd-client-chip"><strong>' + E(fixedClient.name || '未命名客户') + '</strong>' + (fixedClient.company ? '<span>' + E(fixedClient.company) + '</span>' : '') + '<small>本次业务和收款将自动归入该客户</small></div><small id="qdClientHint"></small></div>'
-      : '<div class="field full"><label>客户 *</label><select id="qdClient" onchange="qdClientChange()"><option value="">请选择客户…</option>' +
-        (won.length ? '<optgroup label="已成交客户">' + won.map(opt).join('') + '</optgroup>' : '') +
-        (rest.length ? '<optgroup label="其他客户">' + rest.map(opt).join('') + '</optgroup>' : '') + '</select><small id="qdClientHint"></small></div>';
+      : '<div class="field full qd-client-picker"><label>客户 *<span class="qd-picker-tip">输入姓名 / 公司 / 电话快速查找</span></label>' +
+        '<div class="qd-picker-wrap">' +
+          '<input type="text" id="qdClientSearch" class="qd-picker-input" autocomplete="off" placeholder="输入客户姓名、公司或电话搜索…" oninput="qdClientFilter()" onfocus="qdClientFilter()">' +
+          '<button type="button" class="qd-picker-toggle" onclick="qdClientToggle()" title="展开 / 收起客户列表">▾</button>' +
+          '<select id="qdClient" class="qd-picker-hidden" onchange="qdClientChange()"><option value="">请选择客户…</option>' +
+            (won.length ? '<optgroup label="已成交客户">' + won.map(opt).join('') + '</optgroup>' : '') +
+            (rest.length ? '<optgroup label="其他客户">' + rest.map(opt).join('') + '</optgroup>' : '') + '</select>' +
+          '<div id="qdClientList" class="qd-picker-list" style="display:none"></div>' +
+        '</div><small id="qdClientHint"></small></div>';
     var html = '<div id="qdBox" class="form-grid qd-flow-form">' +
       (isRefundPreset ? '<div class="qd-flow-intro field full"><strong>快速添加返款</strong><span>只需填写收到金额和日期，系统自动记为返款业务并全部计入利润，无需合同和办理流程。</span></div>' : '<div class="qd-flow-intro field full"><strong>一张表完成业务登记</strong><span>先选择报价或成交；确认成交后，系统自动建立合同、登记首笔回款并计算待收款。</span></div>') +
       clientField +
@@ -11992,6 +12016,7 @@ function renderCustomerActionCenter(){
       if (isRefundPreset && bizEl) {
         bizEl.value = '返款';
         bizEl.dataset.autoBiz = 'true';
+        bizEl.dataset.lockRefund = 'true';
         window.qdType();
       } else if (fixedClient) prefillBizFromClient(fixedClient);
     } catch (e) {}
@@ -12033,6 +12058,7 @@ function renderCustomerActionCenter(){
     try {
       var bizSel = el('qdBiz');
       if (!bizSel || !c || !c.business) return;
+      if (bizSel.dataset.lockRefund === 'true') return;
       var want = String(c.business).trim();
       if (!want) return;
       var allowed = (!bizSel.value) || bizSel.dataset.autoBiz === 'true';
@@ -12047,6 +12073,55 @@ function renderCustomerActionCenter(){
       prefillBizFromClient(sel && sel.value ? clientOf(sel.value) : null);
     } catch (e) {}
     qdUpdate();
+  };
+
+  /* 可搜索客户选择器：原生 select 保留为隐藏值载体，搜索框只负责筛选与选取 */
+  window.qdClientFilter = function () {
+    var input = el('qdClientSearch'), list = el('qdClientList');
+    if (!input || !list) return;
+    var q = String(input.value || '').trim().toLowerCase();
+    var all = (data.clients || []).slice().sort(function (a, b) { return String(a.name || '').localeCompare(String(b.name || ''), 'zh-Hans-CN'); });
+    var matched = all.filter(function (c) {
+      if (!q) return true;
+      var hay = [c.name, c.company, c.phone, c.business, c.source, c.wechat].join(' ').toLowerCase();
+      return hay.indexOf(q) >= 0;
+    });
+    var won = matched.filter(function (c) { return c.status === '已成交'; });
+    var rest = matched.filter(function (c) { return c.status !== '已成交'; });
+    var curId = String(val('qdClient') || '');
+    function row(c) {
+      var bits = [];
+      if (c.phone) bits.push('电话 ' + c.phone);
+      if (c.company) bits.push(c.company);
+      if (c.business && c.business !== c.company) bits.push(c.business);
+      return '<button type="button" class="qd-picker-item' + (same(c.id, curId) ? ' is-selected' : '') + '" onclick="qdClientPick(\'' + String(c.id).replace(/'/g, '\\\'') + '\')">' +
+        '<span class="qd-picker-name">' + E(c.name || '未命名客户') + (c.status === '已成交' ? '<em class="qd-picker-won">已成交</em>' : '') + '</span>' +
+        (bits.length ? '<span class="qd-picker-extra">' + E(bits.join(' · ')) + '</span>' : '') + '</button>';
+    }
+    var html = '';
+    if (!matched.length) html = '<div class="qd-picker-empty">没有匹配的客户。可先点右上角「＋ 新增客户」建档。</div>';
+    else {
+      if (won.length) html += '<div class="qd-picker-group">已成交客户 · ' + won.length + '</div>' + won.map(row).join('');
+      if (rest.length) html += '<div class="qd-picker-group">其他客户 · ' + rest.length + '</div>' + rest.map(row).join('');
+    }
+    list.innerHTML = html;
+    list.style.display = '';
+  };
+  window.qdClientToggle = function () {
+    var list = el('qdClientList');
+    if (!list) return;
+    if (list.style.display === 'none') { window.qdClientFilter(); }
+    else { list.style.display = 'none'; }
+  };
+  window.qdClientPick = function (id) {
+    var sel = el('qdClient'), input = el('qdClientSearch'), c = clientOf(id);
+    if (sel) sel.value = id;
+    if (input && c) {
+      input.value = (c.name || '未命名客户') + (c.company ? ' · ' + c.company : '');
+    }
+    var list = el('qdClientList'); if (list) list.style.display = 'none';
+    window.qdClientChange();
+    if (typeof qdClientHide === 'function') {}
   };
 
   window.qdSave = function () {
