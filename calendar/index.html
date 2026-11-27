@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="黄历日历">
 <meta name="format-detection" content="telephone=no">
 <title>黄历日历 · 日程天气</title>
-<script>window.__APP_VERSION__='2.0';window.__APP_VERSION_CODE__=20;</script>
+<script>window.__APP_VERSION__='2.2';window.__APP_VERSION_CODE__=22;</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232563eb'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif'%3E%E5%8E%86%3C/text%3E%3C/svg%3E">
 <style>/* ===== 手机日历 · 黄历 App 样式 ===== */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -718,7 +718,7 @@ html.m-js .sheet.on{transform:none}
       <div class="sec-title">关于</div>
       <div class="card" style="padding:14px">
         <div class="hint" style="margin:0">
-          <b style="color:var(--ink);font-size:13px">黄历日历 <span id="aboutVer">v2.0</span></b><br>
+          <b style="color:var(--ink);font-size:13px">黄历日历 <span id="aboutVer">v2.2</span></b><br>
           黄历（宜忌 / 冲煞 / 值神 / 建除 / 星宿 / 彭祖百忌 / 吉神方位）由 lunar-javascript 本地计算，离线可用；<br>
           节假日与调休依据国务院办公厅 2026 / 2027 年放假安排；<br>
           天气由 Open-Meteo 提供（免费公开数据）；<br>
@@ -2994,7 +2994,7 @@ else init();
   window.__QIFU_UPDATE_READY__ = true;
 
   var NATIVE = window.QifuNative && typeof window.QifuNative.getUpdateInfo === 'function';
-  var info = { code: 20, version: '2.0', cached: false, url: '' };
+  var info = { code: 22, version: '2.2', cached: false, url: '' };
 
   function $(s) { return document.querySelector(s); }
   function esc(s) {
@@ -3009,7 +3009,7 @@ else init();
   function hideNativeNotice() {
     var s = $('#updStatus');
     if (s && !NATIVE) {
-      s.textContent = '当前为网页/旧版内核，在线更新需使用 v1.8 及以上安装包（当前内置 v2.0）';
+      s.textContent = '当前为网页/旧版内核，在线更新需使用 v1.8 及以上安装包（当前内置 v2.2）';
     }
   }
 
@@ -3021,8 +3021,8 @@ else init();
     var cv = $('#updCurVer');
     var st = $('#updStatus');
     var av = $('#aboutVer');
-    if (cv) cv.textContent = 'v' + (info.version || '2.0');
-    if (av) av.textContent = 'v' + (info.version || '2.0');
+    if (cv) cv.textContent = 'v' + (info.version || '2.2');
+    if (av) av.textContent = 'v' + (info.version || '2.2');
     if (st) {
       st.textContent = info.cached
         ? '已更新到 v' + info.version + '（在线版本）'
@@ -3030,32 +3030,57 @@ else init();
     }
   }
 
-  // GitHub raw 官方地址在国内直连经常超时，自动切换为 gh-proxy 镜像（CRM 端已验证可用）
+  // 多源自动重试：jsDelivr CDN 在国内最稳且返回完整，gh-proxy 备选，官方 raw 兜底
   var RAW_URL = 'https://raw.githubusercontent.com/mussicting1/qifu-manager-updates/main/calendar/update.json';
-  var MIRROR_URL = 'https://gh-proxy.com/https://raw.githubusercontent.com/mussicting1/qifu-manager-updates/main/calendar/update.json';
+  var SOURCES = [
+    'https://cdn.jsdelivr.net/gh/mussicting1/qifu-manager-updates@main/calendar/update.json',
+    'https://fastly.jsdelivr.net/gh/mussicting1/qifu-manager-updates@main/calendar/update.json',
+    'https://gh-proxy.com/https://raw.githubusercontent.com/mussicting1/qifu-manager-updates/main/calendar/update.json',
+    'https://raw.githubusercontent.com/mussicting1/qifu-manager-updates/main/calendar/update.json'
+  ];
+  var tryIdx = 0;          // 当前尝试的源下标
+  var usingFallback = false; // 是否正在走多源轮询（用户手动设址时为 false）
 
   function check() {
-    if (!NATIVE) { toast('在线更新需使用 v1.8 及以上安装包（当前内置 v2.0）'); return; }
+    if (!NATIVE) { toast('在线更新需使用 v1.8 及以上安装包（当前内置 v2.2）'); return; }
     var url = (info.url || '').trim();
-    if (!url || url === RAW_URL) {
-      // 未设置或仍是官方 raw：自动持久化为国内镜像，之后检查更新都走镜像
-      try { QifuNative.setUpdateUrl(MIRROR_URL); } catch (e) {}
-      info.url = MIRROR_URL;
-      url = MIRROR_URL;
-      var stMirror = $('#updStatus');
-      if (stMirror) stMirror.textContent = '已切换国内镜像加速…';
+    // 未设置、官方 raw、或旧的 gh-proxy 单源：统一改为多源轮询，从 jsDelivr 开始
+    if (!url || url === RAW_URL || url.indexOf('gh-proxy.com') >= 0
+        || url.indexOf('jsdelivr') >= 0 || url.indexOf('ghproxy.net') >= 0) {
+      usingFallback = true;
+      tryIdx = 0;
+      url = SOURCES[0];
+      // 把首选源持久化，避免每次都从空开始
+      try { QifuNative.setUpdateUrl(SOURCES[0]); } catch (e) {}
+      info.url = SOURCES[0];
+    } else {
+      usingFallback = false; // 用户自定义的其它地址：不自动换源
     }
-    if (!url) { setUrl(true); return; }
     var st = $('#updStatus');
-    if (st) st.textContent = '正在检查更新…';
+    if (st) st.textContent = '正在检查更新…' + (usingFallback ? '（线路 1/' + SOURCES.length + '）' : '');
     try { QifuNative.checkUpdate(url); }
     catch (e) { toast('检查失败：' + e.message); }
   }
 
+  /** 失败时尝试下一个源；返回 true 表示已发起下一次尝试 */
+  function tryNextSource(failedUrl) {
+    if (!usingFallback) return false;
+    // 找到失败源在列表中的位置，从下一个继续
+    var cur = SOURCES.indexOf(failedUrl);
+    if (cur < 0) cur = tryIdx - 1;
+    var next = cur + 1;
+    if (next >= SOURCES.length) return false;
+    tryIdx = next;
+    var st = $('#updStatus');
+    if (st) st.textContent = '正在检查更新…（线路 ' + (next + 1) + '/' + SOURCES.length + '）';
+    try { QifuNative.checkUpdate(SOURCES[next]); return true; }
+    catch (e) { return false; }
+  }
+
   function setUrl(first) {
-    if (!NATIVE) { toast('在线更新需使用 v1.8 及以上安装包（当前内置 v2.0）'); return; }
+    if (!NATIVE) { toast('在线更新需使用 v1.8 及以上安装包（当前内置 v2.2）'); return; }
     var body = ''
-      + '<div class="hint" style="margin:0 0 10px">填写更新清单地址（update.json 的公开网址）。App 会读取其中的版本号，发现新版本时提示下载。留空则只用内置版本。</div>'
+      + '<div class="hint" style="margin:0 0 10px">填写更新清单地址（update.json 的公开网址）。留空则自动依次尝试多个国内加速线路（jsDelivr 等），哪个通用哪个。</div>'
       + '<div class="field"><label>更新地址</label><input id="updUrlIn" type="text" placeholder="https://example.com/update.json" value="' + esc(info.url || '') + '"></div>'
       + '<div class="hint" style="margin:8px 0 14px;opacity:.7">支持 http / https 直链。设置后会立即检查一次。</div>'
       + '<div class="acts"><button class="btn ghost" onclick="App.closeSheet()">取消</button>'
@@ -3092,7 +3117,10 @@ else init();
       try { r = JSON.parse(json); } catch (e) { r = { ok: false }; }
       var st = $('#updStatus');
       if (!r.ok) {
-        if (st) st.textContent = '检查失败：' + (r.error || '网络错误');
+        // 多源轮询：当前线路失败，自动尝试下一个
+        var failedUrl = SOURCES[Math.max(0, tryIdx)];
+        if (usingFallback && tryNextSource(failedUrl)) return;
+        if (st) st.textContent = '检查失败：' + (r.error || '网络错误') + '（已尝试全部线路）';
         toast('检查更新失败：' + (r.error || '网络错误'));
         return;
       }
