@@ -3009,9 +3009,21 @@ else init();
     }
   }
 
+  // GitHub raw 官方地址在国内直连经常超时，自动切换为 gh-proxy 镜像（CRM 端已验证可用）
+  var RAW_URL = 'https://raw.githubusercontent.com/mussicting1/qifu-manager-updates/main/calendar/update.json';
+  var MIRROR_URL = 'https://gh-proxy.com/https://raw.githubusercontent.com/mussicting1/qifu-manager-updates/main/calendar/update.json';
+
   function check() {
     if (!NATIVE) { toast('在线更新需使用 v1.8 及以上安装包（当前内置 v1.9）'); return; }
     var url = (info.url || '').trim();
+    if (!url || url === RAW_URL) {
+      // 未设置或仍是官方 raw：自动持久化为国内镜像，之后检查更新都走镜像
+      try { QifuNative.setUpdateUrl(MIRROR_URL); } catch (e) {}
+      info.url = MIRROR_URL;
+      url = MIRROR_URL;
+      var stMirror = $('#updStatus');
+      if (stMirror) stMirror.textContent = '已切换国内镜像加速…';
+    }
     if (!url) { setUrl(true); return; }
     var st = $('#updStatus');
     if (st) st.textContent = '正在检查更新…';
